@@ -7,8 +7,8 @@ on:
       - main
       - 'feature/*'
 env:
-  MONGO_URI: ‘mongodb+srv://supercluster.d83jj.mongodb.net/superData'
-  MONGO_USERNAME: superuser
+  MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+  MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
   MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 jobs:
     unit-testing:
@@ -16,11 +16,9 @@ jobs:
         strategy:
           max-parallel: 2
           matrix:
-            os: [ubuntu-latest, ubuntu-22.04]
+            os: [ubuntu-latest]
             node-version: [19, 20]
-            exclude:
-              - os: ubuntu-latest
-                node-version: 19
+
         runs-on: ${{ matrix.os }}
         steps:
         - name: Checkout Repository
@@ -41,27 +39,34 @@ jobs:
           run: npm install
     
         - name: Unit Testing
-          continue-on-error: true
+          #continue-on-error: true
           run: npm test
           
-        - name: Archive Test Result
-          continue-on-error: true
+        - name: Archive Test Result   #To build an artifact
+          #continue-on-error: true
           if: always()
           uses: actions/upload-artifact@v4
           with:
-            name: Mocha-Test-Result-1
+            name: Mocha-Test-Result
             path: test-results.xml
 
     code-coverage:
         name: Code Coverage
-        runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@v4
+        strategy:
+          max-parallel: 2
+          matrix:
+            os: [ubuntu-latest]
+            node-version: [19, 20]
 
-        - name: Node js version 20
+        runs-on: ${{ matrix.os }}
+        steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Setup NodeJS version
           uses: actions/setup-node@v4
           with:
-            node-version: 20
+            node-version: ${{ matrix.node-version }}
             
         - name: Caching Dependencies
           uses: actions/cache@v4
