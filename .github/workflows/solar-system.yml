@@ -3,6 +3,10 @@ name: Solar System Workflow
 
 on: 
   workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Enter a custom message'
+        required: true
   push:
     branches:
       - main
