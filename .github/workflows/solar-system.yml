@@ -14,9 +14,13 @@ jobs:
     unit-testing:
         name: Unit Testing
         strategy:
+          max-parallel: 2
           matrix:
             os: [ubuntu-latest, ubuntu-22.04]
             node-version: [19, 20]
+            exclude:
+              - os: ubuntu-latest
+                version: 19
         runs-on: ${{ matrix.os }}
         steps:
         - name: Checkout Repository
@@ -44,7 +48,7 @@ jobs:
           if: always()
           uses: actions/upload-artifact@v4
           with:
-            name: Mocha-Test-Result
+            name: Mocha-Test-Result-1
             path: test-results.xml
 
     code-coverage:
