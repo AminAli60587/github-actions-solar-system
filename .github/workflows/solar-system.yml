@@ -20,7 +20,7 @@ jobs:
             node-version: [19, 20]
             exclude:
               - os: ubuntu-latest
-                version: 19
+                node-version: 19
         runs-on: ${{ matrix.os }}
         steps:
         - name: Checkout Repository
