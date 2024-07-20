@@ -174,6 +174,6 @@ jobs:
             env:
               NAMESPACE: ${{ vars.NAMESPACE }}
               REPLICAS: ${{ vars.REPLICAS }}
-              IMAGE: ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+              IMAGE: ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
               INGRESS_IP: ${{ env.INGRESS_IP }}
           - run: cat kubernetes/development/*.yaml
